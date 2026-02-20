@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Explorer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>🎬 Movie Explorer</h2>
+</nav>
+
+<div class="container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search movie...">
+        <button id="searchBtn">Search</button>
+    </div>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+
+    <div id="movieContainer" class="movie-container"></div>
+
+    <div id="pagination" class="pagination hidden">
+        <button id="prevBtn">Previous</button>
+        <span id="pageNumber">1</span>
+        <button id="nextBtn">Next</button>
+    </div>
+</div>
+
+<!-- Movie Details Modal -->
+<div id="movieModal" class="modal hidden">
+    <div class="modal-content">
+        <span id="closeModal">&times;</span>
+        <div id="modalDetails"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
