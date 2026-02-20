@@ -57,11 +57,9 @@ body {
     background: #1a1a1a;
     padding: 15px;
     border-radius: 10px;
-    transition: 0.3s;
     cursor: pointer;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.5s forwards;
+    transition: 0.3s ease;
+    animation: fadeIn 0.4s ease forwards;
 }
 
 .movie-card:hover {
@@ -93,10 +91,8 @@ body {
 }
 
 @keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .error {
@@ -118,23 +114,29 @@ body {
     cursor: pointer;
 }
 
+.pagination button:hover {
+    background: #00c4cc;
+}
+
 /* Modal */
 .modal {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.8);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
     background: #1a1a1a;
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     position: relative;
+    animation: fadeIn 0.3s ease;
 }
 
 #closeModal {

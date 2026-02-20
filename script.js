@@ -17,20 +17,23 @@ const modalDetails = document.getElementById("modalDetails");
 let currentPage = 1;
 let currentSearch = "";
 
+/* Search Button */
 searchBtn.addEventListener("click", () => {
     currentSearch = searchInput.value.trim();
-    if (currentSearch) {
-        currentPage = 1;
-        fetchMovies();
-    }
+    if (!currentSearch) return;
+
+    currentPage = 1;
+    fetchMovies();
 });
 
+/* Enter Key Search */
 searchInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
         searchBtn.click();
     }
 });
 
+/* Fetch Movies */
 async function fetchMovies() {
     loading.style.display = "block";
     errorDiv.textContent = "";
@@ -50,6 +53,7 @@ async function fetchMovies() {
             errorDiv.textContent = "Movie not found!";
             pagination.style.display = "none";
         }
+
     } catch (error) {
         errorDiv.textContent = "Something went wrong!";
     }
@@ -57,6 +61,7 @@ async function fetchMovies() {
     loading.style.display = "none";
 }
 
+/* Display Movies */
 function displayMovies(movies) {
     movieContainer.innerHTML = "";
 
@@ -65,7 +70,7 @@ function displayMovies(movies) {
         card.classList.add("movie-card");
 
         card.innerHTML = `
-            <img src="${movie.Poster !== "N/A" ? movie.Poster : ""}">
+            <img src="${movie.Poster !== "N/A" ? movie.Poster : ""}" alt="${movie.Title}">
             <h3>${movie.Title}</h3>
             <p>${movie.Year}</p>
         `;
@@ -78,33 +83,41 @@ function displayMovies(movies) {
     });
 }
 
+/* Fetch Movie Details */
 async function fetchMovieDetails(id) {
-    const res = await fetch(
-        `https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`
-    );
-    const data = await res.json();
+    try {
+        const res = await fetch(
+            `https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`
+        );
+        const data = await res.json();
 
-    modalDetails.innerHTML = `
-        <h2>${data.Title}</h2>
-        <p><strong>Rating:</strong> ${data.imdbRating}</p>
-        <p><strong>Genre:</strong> ${data.Genre}</p>
-        <p><strong>Plot:</strong> ${data.Plot}</p>
-    `;
+        modalDetails.innerHTML = `
+            <h2>${data.Title}</h2>
+            <p><strong>⭐ Rating:</strong> ${data.imdbRating}</p>
+            <p><strong>Genre:</strong> ${data.Genre}</p>
+            <p><strong>Plot:</strong> ${data.Plot}</p>
+        `;
 
-    modal.style.display = "flex";
+        modal.style.display = "flex";
+
+    } catch {
+        modalDetails.innerHTML = "Error loading details.";
+        modal.style.display = "flex";
+    }
 }
 
+/* Close Modal */
 closeModal.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// FIXED HERE
 modal.addEventListener("click", (e) => {
     if (e.target === modal) {
         modal.style.display = "none";
     }
 });
 
+/* Pagination */
 prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
         currentPage--;
