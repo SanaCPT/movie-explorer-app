@@ -10,46 +10,74 @@ body {
     color: white;
 }
 
-/* Navbar */
 .navbar {
-    background: #111;
+    background: #121212;
     padding: 20px;
     text-align: center;
-    color: #00f7ff;
     box-shadow: 0 2px 10px #000;
 }
 
 .container {
-    padding: 40px;
+    padding: 30px;
     text-align: center;
 }
 
 .search-box {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
-input {
+.search-box input {
     padding: 10px;
     width: 250px;
     border-radius: 5px;
     border: none;
 }
 
-button {
+.search-box button {
     padding: 10px 15px;
     background: #00f7ff;
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    margin-left: 5px;
     font-weight: bold;
 }
 
-button:hover {
-    background: white;
+.search-box button:hover {
+    background: #00c4cc;
 }
 
-/* Spinner */
+.movie-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.movie-card {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s forwards;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00f7ff;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.loading {
+    display: none;
+}
+
 .spinner {
     width: 40px;
     height: 40px;
@@ -64,33 +92,6 @@ button:hover {
     100% { transform: rotate(360deg); }
 }
 
-.hidden {
-    display: none;
-}
-
-/* Movie Grid */
-.movie-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.movie-card {
-    background: #1a1a1a;
-    padding: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.5s forwards;
-    transition: 0.3s;
-}
-
-.movie-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 0 25px #00f7ff;
-}
-
 @keyframes fadeIn {
     to {
         opacity: 1;
@@ -98,32 +99,23 @@ button:hover {
     }
 }
 
-.movie-card img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.movie-info {
+.error {
+    color: red;
     margin-top: 10px;
 }
 
-/* Error */
-.error {
-    background: #1a0000;
-    color: #ff4c4c;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px auto;
-    width: fit-content;
-}
-
-/* Pagination */
 .pagination {
-    margin-top: 30px;
+    margin-top: 20px;
+    display: none;
 }
 
 .pagination button {
+    padding: 8px 12px;
     margin: 0 10px;
+    background: #00f7ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Modal */
@@ -137,18 +129,18 @@ button:hover {
 }
 
 .modal-content {
-    background: #111;
+    background: #1a1a1a;
     padding: 20px;
-    width: 90%;
-    max-width: 700px;
     border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
     position: relative;
 }
 
 #closeModal {
     position: absolute;
-    top: 10px;
     right: 15px;
-    font-size: 25px;
+    top: 10px;
     cursor: pointer;
+    font-size: 20px;
 }

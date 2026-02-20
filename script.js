@@ -5,7 +5,6 @@ const searchInput = document.getElementById("searchInput");
 const movieContainer = document.getElementById("movieContainer");
 const loading = document.getElementById("loading");
 const errorDiv = document.getElementById("error");
-
 const pagination = document.getElementById("pagination");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
@@ -16,35 +15,46 @@ const closeModal = document.getElementById("closeModal");
 const modalDetails = document.getElementById("modalDetails");
 
 let currentPage = 1;
-let currentQuery = "";
+let currentSearch = "";
 
-async function fetchMovies(query, page = 1) {
-    try {
-        loading.classList.remove("hidden");
-        errorDiv.classList.add("hidden");
-        movieContainer.innerHTML = "";
-
-        const response = await fetch(
-            `https://www.omdbapi.com/?s=${query}&page=${page}&apikey=${API_KEY}`
-        );
-
-        const data = await response.json();
-        loading.classList.add("hidden");
-
-        if (data.Response === "False") {
-            showError("Movie not found!");
-            pagination.classList.add("hidden");
-            return;
-        }
-
-        displayMovies(data.Search);
-        pagination.classList.remove("hidden");
-        pageNumber.textContent = currentPage;
-
-    } catch (error) {
-        loading.classList.add("hidden");
-        showError("Something went wrong!");
+searchBtn.addEventListener("click", () => {
+    currentSearch = searchInput.value.trim();
+    if (currentSearch) {
+        currentPage = 1;
+        fetchMovies();
     }
+});
+
+searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        searchBtn.click();
+    }
+});
+
+async function fetchMovies() {
+    loading.style.display = "block";
+    errorDiv.textContent = "";
+    movieContainer.innerHTML = "";
+
+    try {
+        const res = await fetch(
+            `https://www.omdbapi.com/?s=${currentSearch}&page=${currentPage}&apikey=${API_KEY}`
+        );
+        const data = await res.json();
+
+        if (data.Response === "True") {
+            displayMovies(data.Search);
+            pagination.style.display = "block";
+            pageNumber.textContent = currentPage;
+        } else {
+            errorDiv.textContent = "Movie not found!";
+            pagination.style.display = "none";
+        }
+    } catch (error) {
+        errorDiv.textContent = "Something went wrong!";
+    }
+
+    loading.style.display = "none";
 }
 
 function displayMovies(movies) {
@@ -55,24 +65,24 @@ function displayMovies(movies) {
         card.classList.add("movie-card");
 
         card.innerHTML = `
-            <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300"}">
-            <div class="movie-info">
-                <h3>${movie.Title}</h3>
-                <p>Year: ${movie.Year}</p>
-                <p>Type: ${movie.Type}</p>
-            </div>
+            <img src="${movie.Poster !== "N/A" ? movie.Poster : ""}">
+            <h3>${movie.Title}</h3>
+            <p>${movie.Year}</p>
         `;
 
-        card.addEventListener("click", () => fetchMovieDetails(movie.imdbID));
+        card.addEventListener("click", () => {
+            fetchMovieDetails(movie.imdbID);
+        });
+
         movieContainer.appendChild(card);
     });
 }
 
 async function fetchMovieDetails(id) {
-    const response = await fetch(
+    const res = await fetch(
         `https://www.omdbapi.com/?i=${id}&apikey=${API_KEY}`
     );
-    const data = await response.json();
+    const data = await res.json();
 
     modalDetails.innerHTML = `
         <h2>${data.Title}</h2>
@@ -81,36 +91,28 @@ async function fetchMovieDetails(id) {
         <p><strong>Plot:</strong> ${data.Plot}</p>
     `;
 
-    modal.classList.remove("hidden");
+    modal.style.display = "flex";
 }
 
-function showError(message) {
-    errorDiv.textContent = message;
-    errorDiv.classList.remove("hidden");
-}
-
-searchBtn.addEventListener("click", () => {
-    currentQuery = searchInput.value.trim();
-    currentPage = 1;
-    if (currentQuery) fetchMovies(currentQuery, currentPage);
+closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
 });
 
-searchInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") searchBtn.click();
-});
-
-nextBtn.addEventListener("click", () => {
-    currentPage++;
-    fetchMovies(currentQuery, currentPage);
+// FIXED HERE
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
 });
 
 prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
         currentPage--;
-        fetchMovies(currentQuery, currentPage);
+        fetchMovies();
     }
 });
 
-closeModal.addEventListener("click", () => {
-    modal.classList.add("hidden");
+nextBtn.addEventListener("click", () => {
+    currentPage++;
+    fetchMovies();
 });
